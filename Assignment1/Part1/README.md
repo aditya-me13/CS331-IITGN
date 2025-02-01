@@ -13,7 +13,7 @@ This project involves modifying a functional packet sniffer to analyze network t
 
 Ensure you have the following installed:
 
-- Python 3.x
+- Python 3.13
 - Scapy (`pip install scapy`)
 - Matplotlib (`pip install matplotlib`)
 - tqdm (`pip install tqdm`)

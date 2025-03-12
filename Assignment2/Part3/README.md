@@ -46,7 +46,7 @@ sudo tcpdump -i any port 5001 -w capture.pcap
 
 Save the `.pcap` file into `pcap_files` directory for analysis. Use different names for different configurations.
 
-## **5. Analyzing the Captured Packets**
+## **Analyzing the Captured Packets**
 After the file transfer completes, analyze the captured traffic using:
 ```bash
 python analyze_pcap.py

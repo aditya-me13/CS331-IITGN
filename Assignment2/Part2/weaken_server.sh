@@ -1,6 +1,3 @@
-#!/bin/bash
-# weaken_server.sh - Adjust server settings to simulate vulnerability to SYN flood attacks
-
 # Store initial kernel parameters for later restoration
 echo "Backing up existing kernel settings..."
 initial_backlog=$(sysctl -n net.ipv4.tcp_max_syn_backlog)

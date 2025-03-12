@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# lightweight_tcp_server.py - A basic TCP server for handling incoming connections
-
 import socket
 import threading
 import time

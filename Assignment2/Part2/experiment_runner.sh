@@ -1,6 +1,3 @@
-#!/bin/bash
-# experiment_runner.sh - Conduct a SYN flood experiment with enhanced attack execution
-
 # Configuration
 SERVER_IP="192.168.56.104"  # Update with your server's IP
 SERVER_PORT=8000

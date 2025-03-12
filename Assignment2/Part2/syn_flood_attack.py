@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# network_stress_test.py - Educational SYN flood script for controlled environments
-
 import os
 import sys
 import random

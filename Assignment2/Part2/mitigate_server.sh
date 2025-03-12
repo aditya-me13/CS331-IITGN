@@ -1,6 +1,3 @@
-#!/bin/bash
-# mitigate_server.sh - Implement SYN flood protection measures
-
 # Enable SYN cookies to prevent SYN flood attacks
 echo "Activating SYN cookies for enhanced protection..."
 sudo sysctl -w net.ipv4.tcp_syncookies=1

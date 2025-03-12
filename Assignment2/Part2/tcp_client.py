@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# tcp_client.py - Simulates legitimate TCP traffic to a server
-
 import socket
 import time
 import sys

@@ -14,48 +14,71 @@ def run_iperf3_test(net, option, algo, loss):
     }
 
     print(f"*** Starting iperf3 server on H7 using {algo} congestion control")
-    server.cmd('iperf3 -s -p 5201 -D')  # Start iperf3 server on H7
     
     if option == 'a':
         print(f"*** Running experiment (a): Single client H1 (TCP {algo})")
-        clients['H1'].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} > a_{algo}.txt &')
+        input("Press Enter to continue...")
+
+        server.cmd('iperf3 -s -p 5201 -D')  # Start iperf3 server on H7
+
+        clients['H1'].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
         sleep(150)
     
     elif option == 'b':
         print("*** Running experiment (b): Staggered clients")
-        clients['H1'].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} > b1_{algo}.txt &')
-        sleep(15)
         input("Press Enter to continue...")
 
-        clients['H3'].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 120 -C {algo} > b1_{algo}.txt &')
-        sleep(15)
-        input("Press Enter to continue...")
+        server.cmd('iperf3 -s -p 5201 -D')
+        server.cmd('iperf3 -s -p 5202 -D')
+        server.cmd('iperf3 -s -p 5203 -D')
 
-        clients['H4'].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 90 -C {algo} > b1_{algo}.txt &')
+        sleep(5)  # Let Mininet stabilize
+
+        clients['H1'].cmd(f'nohup iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} > h1.txt 2>&1 &')
         sleep(15)
-        input("Press Enter to continue...")
-        # sleep(90)
+
+        clients['H3'].cmd(f'nohup iperf3 -c {server.IP()} -p 5202 -b 10M -P 10 -t 120 -C {algo} > h3.txt 2>&1 &')
+        sleep(15)
+
+        clients['H4'].cmd(f'nohup iperf3 -c {server.IP()} -p 5203 -b 10M -P 10 -t 90 -C {algo} > h4.txt 2>&1 &')
+        sleep(100)  # Ensure all transfers complete
+
+        server.cmd('pkill iperf3')
+
     
     elif option == 'c' or option == 'd':
         print(f"*** Running experiment ({option}): Bandwidth configuration, with {algo} congestion control and loss = {loss}")
-        
-        clients['H3'].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
+        input("Press Enter to continue...")
+
+        server.cmd('iperf3 -s -p 5201 -D')  # Start iperf3 server on H7
+        sleep(5)
+        clients['H3'].cmd(f'nohup iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} > h31.txt 3>&1 &')
         sleep(150)
         input("Press Enter to continue...")
 
-        clients["H1"].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
-        clients["H2"].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
+        server.cmd('iperf3 -s -p 5202 -D')  # Start iperf3 server on H7
+        server.cmd('iperf3 -s -p 5203 -D')  # Start iperf3 server on H7
+        sleep(5)
+        clients["H1"].cmd(f'nohup iperf3 -c {server.IP()} -p 5202 -b 10M -P 10 -t 150 -C {algo} > h12a.txt 3>&1 &')
+        clients["H2"].cmd(f'nohup iperf3 -c {server.IP()} -p 5203 -b 10M -P 10 -t 150 -C {algo} > h22a.txt 3>&1 &')
         sleep(150)
         input("Press Enter to continue...")
 
-        clients["H1"].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
-        clients["H3"].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
+        server.cmd('iperf3 -s -p 5204 -D')  # Start iperf3 server on H7
+        server.cmd('iperf3 -s -p 5205 -D')  # Start iperf3 server on H7
+        sleep(5)
+        clients["H1"].cmd(f'nohup iperf3 -c {server.IP()} -p 5204 -b 10M -P 10 -t 150 -C {algo} > h12b.txt 3>&1 &')
+        clients["H3"].cmd(f'nohup iperf3 -c {server.IP()} -p 5205 -b 10M -P 10 -t 150 -C {algo} > h32b.txt 3>&1 &')
         sleep(150)
         input("Press Enter to continue...")
 
-        clients["H1"].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
-        clients["H3"].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
-        clients["H4"].cmd(f'iperf3 -c {server.IP()} -p 5201 -b 10M -P 10 -t 150 -C {algo} &')
+        server.cmd('iperf3 -s -p 5206 -D')  # Start iperf3 server on H7
+        server.cmd('iperf3 -s -p 5207 -D')  # Start iperf3 server on H7
+        server.cmd('iperf3 -s -p 5208 -D')  # Start iperf3 server on H7
+        sleep(5)
+        clients["H1"].cmd(f'nohup iperf3 -c {server.IP()} -p 5206 -b 10M -P 10 -t 150 -C {algo} > h12c.txt 3>&1 &')
+        clients["H3"].cmd(f'nohup iperf3 -c {server.IP()} -p 5207 -b 10M -P 10 -t 150 -C {algo} > h32c.txt 3>&1 &')
+        clients["H4"].cmd(f'nohup iperf3 -c {server.IP()} -p 5208 -b 10M -P 10 -t 150 -C {algo} > h42c.txt 3>&1 &')
         sleep(150)
         input("Press Enter to continue...")
     
@@ -104,8 +127,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run Mininet with iperf3 experiments")
     parser.add_argument('--option', type=str, required=True, choices=['a', 'b', 'c', 'd'],
                         help="Specify experiment: a, b, c, or d")
-    parser.add_argument('--algo', type=str, required=True, choices=['vegas', 'highspeed', 'reno', 'cubic', 'bbr'],
-                        help="Specify TCP congestion control algorithm: vegas, highspeed, reno, cubic, or bbr")
+    parser.add_argument('--algo', type=str, required=True, choices=['vegas', 'highspeed', 'reno', 'cubic', 'bbr', 'htcp'],
+                        help="Specify TCP congestion control algorithm: vegas, highspeed, reno, cubic, htcp or bbr")
     parser.add_argument('--loss', type=int, default=0, help="Specify packet loss percentage for experiment d")
     
     args = parser.parse_args()
